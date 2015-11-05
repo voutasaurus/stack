@@ -1,24 +1,25 @@
 package stack
 
-import (
-	"errors"
-)
+import "errors"
 
 type IntStack struct {
-	contents []int
+	s Stack
 }
 
 func (s *IntStack) pop() (int, error) {
-	l := len(s.contents)
-	if l == 0 {
-		return 0, errors.New("Cannot pop from empty stack")
+	var auto int
+	top, err := s.s.pop()
+	if err != nil {
+		return auto, err
 	}
-	top := s.contents[l-1]
-	s.contents = s.contents[:l-1]
-	return top, nil
+	topInstance, correct := top.(int)
+	if !correct {
+		return auto, errors.New("Popped element has invalid type. Expected int.")
+	}
+	return topInstance, nil
 }
 
 func (s *IntStack) push(val int) {
-	s.contents = append(s.contents, val)
+	s.s.push(val)
 	return
 }

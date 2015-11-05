@@ -2,26 +2,24 @@ package stack
 
 import "errors"
 
-type Node struct {
-	value    string
-	adjacent []Node
-}
-
 type NodeStack struct {
-	contents []Node
+	s Stack
 }
 
 func (s *NodeStack) pop() (Node, error) {
-	l := len(s.contents)
-	if l == 0 {
-		return Node{}, errors.New("Cannot pop from empty stack")
+	var auto Node
+	top, err := s.s.pop()
+	if err != nil {
+		return auto, err
 	}
-	top := s.contents[l-1]
-	s.contents = s.contents[:l-1]
-	return top, nil
+	topInstance, correct := top.(Node)
+	if !correct {
+		return auto, errors.New("Popped element has invalid type. Expected Node.")
+	}
+	return topInstance, nil
 }
 
 func (s *NodeStack) push(val Node) {
-	s.contents = append(s.contents, val)
+	s.s.push(val)
 	return
 }

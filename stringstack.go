@@ -7,13 +7,14 @@ type StringStack struct {
 }
 
 func (s *StringStack) pop() (string, error) {
+	var auto string
 	top, err := s.s.pop()
 	if err != nil {
-		return "", err
+		return auto, err
 	}
 	topInstance, correct := top.(string)
 	if !correct {
-		return "", errors.New("Popped element has invalid type. Expected string.")
+		return auto, errors.New("Popped element has invalid type. Expected string.")
 	}
 	return topInstance, nil
 }
